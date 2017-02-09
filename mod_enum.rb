@@ -59,6 +59,24 @@ module Enumerable
     end
   end
 
+  def my_all?
+    if self.class == Hash
+      hash = self.to_a
+      for i in (0..hash.size - 1)
+        if yield(hash[i][0], hash[i][1]) != true
+          return false
+        end
+      end
+    else
+      arr = self.to_a
+      for i in 0..(arr.length - 1)
+        if yield(arr[i]) != true
+          return false
+        end
+      end
+    end
+    return true
+  end
 end
 
 array = [1, 2, 3, 4, 5]
@@ -79,3 +97,13 @@ newArr = array.my_select do |num|
   num % 2 == 0
 end
 puts newArr
+
+truthy = [2,4,6,8].my_all? do |num|
+  num % 2 == 0
+end
+puts truthy
+
+falsy = [2,3,6,8].my_all? do |num|
+  num % 2 == 0
+end
+puts falsy
