@@ -175,7 +175,7 @@ module Enumerable
       arr2 = []
 
       for i in 0..(arr.length - 1)
-        element = yield (arr[i])
+        element = yield(arr[i])
         arr2 << element
       end
 
@@ -199,9 +199,9 @@ module Enumerable
 
       for i in 0..(arr.length - 1)
         if i == 0
-          element = yield (arr[0])
+          element = arr[0]
         else
-          element = yield (element)
+          element = yield(element, arr[i])
         end
       end
 
@@ -293,3 +293,12 @@ end
 puts falsy
 
 #test my_inject
+truthy = [2,4,6,8].my_inject do |sum, num|
+  sum * num
+end
+puts truthy
+
+truthy = [2,4,6,8].my_inject do |sum, num|
+  sum + num
+end
+puts truthy
