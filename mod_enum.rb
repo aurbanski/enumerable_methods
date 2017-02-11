@@ -159,13 +159,61 @@ module Enumerable
       return count
   end
 
-  def my_map
+  def my_map(&proc)
+    if proc != nil
+      if self.class == Hash
+        hash = self.to_a
+        hash2 = {}
+
+        for i in 0..(hash.size - 1)
+          element = proc.call(hash[i][0], [i][1])
+          hash2[hash[i][0]] = element
+        end
+
+        return hash2
+      else
+        arr = self.to_a
+        arr2 = []
+
+        for i in 0..(arr.length - 1)
+          element = proc.call(arr[i])
+          arr2 << element
+        end
+
+        return arr2
+      end
+    else
+      if self.class == Hash
+        hash = self.to_a
+        hash2 = {}
+
+        for i in 0..(hash.size - 1)
+          element = yield(hash[i][0], hash[i][1])
+          hash2[hash[i][0]] = element
+        end
+
+        return hash2
+      else
+        arr = self.to_a
+        arr2 = []
+
+        for i in 0..(arr.length - 1)
+          element = yield(arr[i])
+          arr2 << element
+        end
+
+        return arr2
+      end
+    end
+  end
+
+  def my_map2(&proc)
     if self.class == Hash
       hash = self.to_a
       hash2 = {}
 
       for i in 0..(hash.size - 1)
-        element = yield(hash[i][0], hash[i][1])
+        element = proc.call(hash[i][0], [i][1])
         hash2[hash[i][0]] = element
       end
 
@@ -175,7 +223,7 @@ module Enumerable
       arr2 = []
 
       for i in 0..(arr.length - 1)
-        element = yield(arr[i])
+        element = proc.call(arr[i])
         arr2 << element
       end
 
@@ -307,7 +355,7 @@ end
 puts truthy
 
 
-#test my_map
+#test my_inject using multiply_els
 def multiply_els(arr)
   array = arr.my_inject do |sum, num|
     sum * num
@@ -316,3 +364,12 @@ def multiply_els(arr)
 end
 
 puts multiply_els([2,4,5])
+
+#test my_map 2
+my_proc = Proc.new{|num| num * 2}
+truthy = [2,4,6,8].my_map(&my_proc)
+puts truthy
+
+my_proc = Proc.new{|key, value| value + "Hell yeah"}
+falsy = {:alex => "Urbanski", :my => "name is", :this => "is fun"}.my_map(&my_proc)
+puts falsy
