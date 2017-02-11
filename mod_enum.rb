@@ -189,8 +189,11 @@ module Enumerable
       hash2 = {}
 
       for i in 0..(hash.size - 1)
-        element = yield(hash[i][0], hash[i][1])
-        hash2[hash[i][0]] = element
+        if i == 0
+
+        else
+
+        end
       end
 
       return hash2
@@ -302,3 +305,14 @@ truthy = [2,4,6,8].my_inject do |sum, num|
   sum + num
 end
 puts truthy
+
+
+#test my_map
+def multiply_els(arr)
+  array = arr.my_inject do |sum, num|
+    sum * num
+  end
+  return array
+end
+
+puts multiply_els([2,4,5])
